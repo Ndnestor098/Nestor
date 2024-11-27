@@ -21,9 +21,10 @@ Route::get('/', function () {
 
 Route::get('/admin', [AdminController::class, "index"])->name("admin");
 
-Route::post('/project', [AdminController::class, "project"])->name("project.create");
+Route::post('/project', [ProjectController::class, "create"])->name("project.create");
 
-Route::get('/create', [ProjectController::class, 'create']);
+Route::delete('/project/{id}', [ProjectController::class, "delete"])->name("project.delete");
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

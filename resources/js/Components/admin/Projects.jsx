@@ -2,14 +2,14 @@ import { useForm } from "@inertiajs/react";
 import React, { useState, useRef, useEffect } from "react";
 import SelectMultiple from "../SelectMultiple";
 
-function ComponentAdding(params) {
+function ComponentAdding({ activeForm }) {
     const [selectedOptions, setSelectedOptions] = useState([]);
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, errors } = useForm({
         file: null,
         title: null,
         url: null,
-        language: selectedOptions,
+        language: null,
     });
     
     const selection = ["PHP", "Laravel", "JavaScript", "SQL"]
@@ -17,7 +17,6 @@ function ComponentAdding(params) {
     const handleChange = (e) => {
         const { name, value, files } = e.target;
 
-        console.log(name, value)
         if (name === "file") {
             setData((prev) => ({ ...prev, [name]: files[0] }));
         } else {
@@ -27,30 +26,48 @@ function ComponentAdding(params) {
 
     const handleSubmit = (e) =>{
         e.preventDefault();
-        post('/project');
+        
+        data.language = selectedOptions;
+
+        post('/project',{
+            onSuccess : activeForm(false)
+        });
     }
 
     return(
         <div className="form_adding" >
             <form className="form" onSubmit={handleSubmit}>
+                <h2 style={{ margin:"0" }}>Adding New Project</h2>
+
                 <div className="subcontent_form">
                     <label htmlFor="file" className="title_label">Image of Project</label>
                     <input type="file" id="file" name="file" onChange={handleChange} style={{ color:"#fff" }} />
+                    { errors.file && <span style={{ color:"#cb2929", textAlign:"center", fontSize:"14", fontWeight:"600" }}>{errors.file}</span> }
                 </div>
+
                 <div className="subcontent_form">
                     <label htmlFor="title" className="title_label">Title</label>
                     <input type="text" name="title" onChange={handleChange} id="title" />
+                    { errors.title && <span style={{ color:"#cb2929", textAlign:"center", fontSize:"14", fontWeight:"600" }}>{errors.title}</span> }
                 </div>
+
                 <div className="subcontent_form">
                     <label htmlFor="url" className="title_label">GitHub URL</label>
                     <input type="text" name="url" onChange={handleChange} id="url" />
+                    { errors.url && <span style={{ color:"#cb2929", textAlign:"center", fontSize:"14", fontWeight:"600" }}>{errors.url}</span> }
                 </div>
+
                 <div className="subcontent_form">
                     <label htmlFor="language" className="title_label">Select to Language</label>
                     <SelectMultiple options={selection}  placeholder="Select to Language" selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions}/>
+                    { errors.language && <span style={{ color:"#cb2929", textAlign:"center", fontSize:"14", fontWeight:"600" }}>{errors.language}</span> }
                 </div>
+
+                <div className="subcontent_form">
+                </div>
+
+                <button className="send">Send</button>
             </form>
-            <button className="send">Send</button>
         </div>
     )
 }
@@ -59,7 +76,16 @@ function ComponentAdding(params) {
 
 export default function ProjectsAdmin({ projects }) {
     const [ activeForm, setActiveForm ] = useState(false);
-    
+    const [ activeDelete, setActiveDelete ] = useState(false);
+    const { data, setData, delete: destroy, errors } = useForm({
+        id: null,
+    });
+
+    const handleDelete = () =>{
+        destroy(`/project/${data.id}` ,{
+            onSuccess : console.log("OK")
+        })
+    }
 
     return (
         <>
@@ -78,7 +104,10 @@ export default function ProjectsAdmin({ projects }) {
                                     <p className="title-portafolios">{ element.title }</p>
                                     
                                     <div className="content-button-portafolio">
-                                        <button className="noselect delete">
+                                        <button className="noselect delete" onClick={()=>{
+                                            data.id = element.id;
+                                            setActiveDelete(true);
+                                        }}>
                                             <span className="text">Delete</span>
                                             <span className="icon">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -96,7 +125,9 @@ export default function ProjectsAdmin({ projects }) {
                 
                 
                 <div className="Content_Adding">
-                    <button className={ projects.length >= 6 ? "noselect adding disabled" : "noselect adding"} onClick={()=>(setActiveForm(true)) }>
+                    <button 
+                        className={ projects.length >= 6 ? "noselect adding disabled" : "noselect adding"} 
+                        onClick={()=>( projects.length >= 6 ? setActiveForm(false) : setActiveForm(true) ) }>
                         <span className="text">Add</span>
                         <span className="icon">
                             <svg viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +143,26 @@ export default function ProjectsAdmin({ projects }) {
 
                 {
                     activeForm && <div className="Container_Form_adding">
-                        <ComponentAdding />
+                        <div style={{ position:"absolute", top:"30px", right:"30px" }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" onClick={()=>{setActiveForm(false)}} fill="white" style={{ height:"30px", width:"30px", cursor:"pointer" }} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                        </div>
+                        <ComponentAdding activeForm={setActiveForm}/>
+                    </div>
+                }
+
+                {
+                    activeDelete && <div className="Container_Form_adding">
+                        <div className="bg-red-100 absolute top-5 border-t border-b border-red-500 text-red-700 px-4 py-3" role="alert">
+                            <p className="font-bold">You are about to delete this project.</p>
+                            <p className="text-sm">When deleting it is not recoverable.</p>
+                            
+                            <div className="flex gap-3 w-100 justify-end mt-3">
+                                <button onClick={()=>{setActiveDelete(false)}}>Cancel</button>
+                                <button onClick={()=>{handleDelete(); setActiveDelete(false);}}>Accept</button>
+                            </div>
+                        </div>
                     </div>
                 }
                 

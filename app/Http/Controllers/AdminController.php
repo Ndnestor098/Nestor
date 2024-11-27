@@ -19,27 +19,4 @@ class AdminController extends Controller
             "certificates" => $certificates
         ]);
     }
-
-    public function project (Request $request) {
-        $validated = $request->validate([
-            'file' => 'required|file',
-            'title' => 'required|string|max:255',
-            'url' => 'required|string|url',
-            'language' => 'required|array',
-        ]);
-
-        $filePath = $request->file('file')->store('public/images');
-
-        $url = Storage::url($filePath);
-
-        Project::create([
-            'file' => $filePath, 
-            'title' => $validated['title'],
-            'url' => $validated['url'],
-            'language' => $validated['language'],
-        ]);
-
-        // Responder con éxito
-        return redirect()->back()->with('success', 'Project added successfully!');
-    }
 }

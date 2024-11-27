@@ -248,11 +248,11 @@
     right: 0;
 }
 
-.form_adding{
+.form_adding {
     background-color: #15191f;
     box-shadow: 0 0 10.5px 4px #ffffff;
-    height: 100%;
-    max-height: 500px;
+    height: min-content;
+    /* max-height: 500px; */
     width: 500px;
     border-radius: 50px;
     display: flex;
@@ -263,25 +263,25 @@
     gap: 25px;
 }
 
-.form{
+.form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.subcontent_form{
+.subcontent_form {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
 }
-.title_label{
+.title_label {
     font-weight: 600;
     color: #fff;
     font-size: 16px;
 }
 
-.send{
+.send {
     color: #29ef8a;
     padding: 10px;
     border: 1px solid #29ef8a;
