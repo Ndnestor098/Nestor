@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Certificate;
@@ -17,6 +18,10 @@ Route::get('/', function () {
         'certificates' => $certificates
     ]);
 });
+
+Route::get('/admin', [AdminController::class, "index"])->name("admin");
+
+Route::post('/project', [AdminController::class, "project"])->name("project.create");
 
 Route::get('/create', [ProjectController::class, 'create']);
 
