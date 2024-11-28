@@ -1,23 +1,16 @@
 import { useForm } from "@inertiajs/react"; // Hook para gestionar formularios con Inertia.js
 import React, { useState } from "react";
 import SelectMultiple from "../SelectMultiple"; // Componente para selección múltiple
-import ButtonAdding from "./ButtonAdding"; // Componente para añadir proyectos
+import ButtonAdding from "./ButtonAdding"; // Componente para añadir certificados
 
-// Componente principal para añadir un proyecto
+// Componente principal para añadir un certificado
 function ComponentAdding({ activeForm }) {
-    // Estado local para las opciones seleccionadas en el selector múltiple
-    const [selectedOptions, setSelectedOptions] = useState([]);
-
     // Hook de Inertia.js para manejar el formulario
     const { data, setData, post, errors } = useForm({
         file: null,      // Archivo subido
-        title: null,     // Título del proyecto
+        title: null,     // Título del certificado
         url: null,       // URL del repositorio
-        language: null,  // Lenguajes seleccionados
     });
-
-    // Opciones disponibles para seleccionar lenguajes
-    const selection = ["PHP", "Laravel", "JavaScript", "SQL"];
 
     // Maneja los cambios en los campos del formulario
     const handleChange = (e) => {
@@ -36,12 +29,8 @@ function ComponentAdding({ activeForm }) {
     const handleSubmit = (e) => {
         e.preventDefault(); // Previene la recarga de la página
 
-        // Prepara el payload para enviar con datos actualizados
-        const payload = { ...data, language: selectedOptions };
-
         // Realiza el POST a la ruta especificada
-        post('/project', {
-            data: payload,
+        post('/certificate', {
             onSuccess: () => activeForm(false), // Cierra el formulario al finalizar
         });
     };
@@ -49,11 +38,11 @@ function ComponentAdding({ activeForm }) {
     return (
         <div className="form_adding">
             <form className="form" onSubmit={handleSubmit}>
-                <h2 style={{ margin: "0" }}>Adding New Project</h2>
+                <h2 style={{ margin: "0" }}>Adding New Certificate</h2>
 
                 {/* Campo para subir archivo */}
                 <div className="subcontent_form">
-                    <label htmlFor="file" className="title_label">Image of Project</label>
+                    <label htmlFor="file" className="title_label">Image of Certificate</label>
                     <input type="file" id="file" name="file" onChange={handleChange} style={{ color: "#fff" }} />
                     {errors.file && <span style={{ color: "#cb2929", textAlign: "center", fontSize: "14", fontWeight: "600" }}>{errors.file}</span>}
                 </div>
@@ -72,13 +61,6 @@ function ComponentAdding({ activeForm }) {
                     {errors.url && <span style={{ color: "#cb2929", textAlign: "center", fontSize: "14", fontWeight: "600" }}>{errors.url}</span>}
                 </div>
 
-                {/* Selector múltiple para lenguajes */}
-                <div className="subcontent_form">
-                    <label htmlFor="language" className="title_label">Select Language</label>
-                    <SelectMultiple options={selection} placeholder="Select Language" selectedOptions={selectedOptions} setSelectedOptions={setSelectedOptions} />
-                    {errors.language && <span style={{ color: "#cb2929", textAlign: "center", fontSize: "14", fontWeight: "600" }}>{errors.language}</span>}
-                </div>
-
                 {/* Botón de envío */}
                 <button className="send">Send</button>
             </form>
@@ -86,32 +68,58 @@ function ComponentAdding({ activeForm }) {
     );
 }
 
-// Componente para gestionar los proyectos del administrador
+// Componente para gestionar los certificados del administrador
 export default function CertificatesAdmin({ certificates }) {
     const [activeForm, setActiveForm] = useState(false); // Estado para mostrar/ocultar el formulario
     const [activeDelete, setActiveDelete] = useState(false); // Estado para mostrar/ocultar la confirmación de borrado
 
-    // Hook de Inertia.js para manejar la eliminación de proyectos
+    // Hook de Inertia.js para manejar la eliminación de certificados
     const { data, setData, delete: destroy, errors } = useForm({
-        id: null, // ID del proyecto a eliminar
+        id: null, // ID del certificado a eliminar
     });
 
-    // Función para manejar la eliminación de un proyecto
+    // Función para manejar la eliminación de un certificado
     const handleDelete = () => {
-        destroy(`/project/${data.id}`); // Envía la solicitud de eliminación al backend
+        destroy(`/certificate/${data.id}`); // Envía la solicitud de eliminación al backend
     };
 
     return (
         <>
-            <div id="Projects" className="Projects_Admin">
-                <h2 className="title">Projects</h2>
+            <div id="Projects" className="Area_Admin" style={{ height:"100%" }}>
+                <h2 className="title">Certificate</h2>
                 
-                <span className="count">{certificates.length}/6</span>
+                <span className="count">{certificates.length}/8</span>
                 
-                
+                <section className="certificado" style={{ marginBottom:"50px" }}>
+                    <div className="galeria-certificado" id="certificados" style={{ height:"600px" }}>
+                        {
+                            certificates && certificates.map(element => (
+                                <div className="content-certificado" key={element.id + element.title}>
+                                    <div className="img" style={{ backgroundImage: `url(${element.image})` }}></div>
+                                    <p className="title-certificado">{element.title}</p>
+                                    
+                                    <div className="content-button-portafolio">
+                                        {/* Botón para activar la confirmación de borrado */}
+                                        <button className="noselect delete" onClick={() => {
+                                            data.id = element.id;
+                                            setActiveDelete(true);
+                                        }}>
+                                            <span className="text">Delete</span>
+                                            <span className="icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                    <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </section>
 
                 {/* Botón para mostrar el formulario de añadir */}
-                <ButtonAdding array={certificates} />
+                <ButtonAdding array={certificates} max={8} setActiveForm={setActiveForm} />
 
                 {/* Renderiza el formulario de añadir si está activo */}
                 {activeForm && <div className="Container_Form_adding">

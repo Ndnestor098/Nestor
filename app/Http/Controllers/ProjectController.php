@@ -10,7 +10,7 @@ use Inertia\Inertia;
 class ProjectController extends Controller
 {
     public function create (Request $request) {
-        $validated = $request->validate([
+        $request->validate([
             'file' => 'required|file|mimes:jpeg,png,jpg,gif|max:10240',
             'title' => 'required|string|max:255',
             'url' => 'required|string|url',
@@ -23,9 +23,9 @@ class ProjectController extends Controller
 
         Project::create([
             'image' => $url, 
-            'title' => $validated['title'],
-            'enlace' => $validated['url'],
-            'language' => json_encode($validated['language']),
+            'title' => $request->input('title'),
+            'enlace' => $request->input('url'),
+            'language' => json_encode($request->input('language')),
         ]);
 
         // Responder con éxito

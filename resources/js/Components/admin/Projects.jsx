@@ -36,12 +36,10 @@ function ComponentAdding({ activeForm }) {
     const handleSubmit = (e) => {
         e.preventDefault(); // Previene la recarga de la página
 
-        // Prepara el payload para enviar con datos actualizados
-        const payload = { ...data, language: selectedOptions };
+        data.language = selectedOptions;
 
         // Realiza el POST a la ruta especificada
         post('/project', {
-            data: payload,
             onSuccess: () => activeForm(false), // Cierra el formulario al finalizar
         });
     };
@@ -103,7 +101,7 @@ export default function ProjectsAdmin({ projects }) {
 
     return (
         <>
-            <div id="Projects" className="Projects_Admin">
+            <div id="Projects" className="Area_Admin">
                 <h2 className="title">Projects</h2>
                 
                 <span className="count">{projects.length}/6</span>
@@ -113,8 +111,11 @@ export default function ProjectsAdmin({ projects }) {
                         {/* Renderiza cada proyecto */}
                         {projects && projects.map(element => (
                             <div className="content-portafolio" key={element.id}>
+                                
                                 <div className="img" style={{ backgroundImage: `url(${element.image})` }}></div>
+                                
                                 <p className="title-portafolios">{element.title}</p>
+                                
                                 <div className="content-button-portafolio">
                                     {/* Botón para activar la confirmación de borrado */}
                                     <button className="noselect delete" onClick={() => {
@@ -135,7 +136,7 @@ export default function ProjectsAdmin({ projects }) {
                 </section>
 
                 {/* Botón para mostrar el formulario de añadir */}
-                <ButtonAdding array={projects} />
+                <ButtonAdding array={projects} max={6} setActiveForm={setActiveForm}/>
 
                 {/* Renderiza el formulario de añadir si está activo */}
                 {activeForm && <div className="Container_Form_adding">

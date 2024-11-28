@@ -6,13 +6,16 @@
 .input {
     display: flex;
     flex-direction: column;
-    width: 200px;
-    height: 100vh;
+    width: 250px; /* El ancho deseado */
+    min-height: 100vh; /* Asegura que ocupe toda la altura del viewport */
     background-color: #15191f;
     border-radius: 5px;
+    position: fixed;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Opcional */
+    margin-right: 10px;
 }
 
-.Projects_Admin {
+.Area_Admin {
     width: 100%;
 }
 
@@ -53,8 +56,7 @@
     border-radius: 4px;
 }
 
-.value:not(:active):hover,
-.value:focus {
+.active_menu {
     background-color: #21262c;
 }
 
@@ -165,6 +167,7 @@
     border-radius: 5px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
     background: #44cc3e;
+    margin: 20px 0;
 }
 
 .adding,
@@ -239,7 +242,7 @@
 .Container_Form_adding {
     height: 100%;
     width: 100%;
-    position: absolute;
+    position: fixed;
     background-color: #15191f7e;
     display: flex;
     justify-content: center;
