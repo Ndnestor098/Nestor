@@ -87,7 +87,7 @@ function ComponentAdding({ activeForm }) {
 }
 
 // Componente para gestionar los proyectos del administrador
-export default function ProjectsAdmin({ projects }) {
+export default function CertificatesAdmin({ certificates }) {
     const [activeForm, setActiveForm] = useState(false); // Estado para mostrar/ocultar el formulario
     const [activeDelete, setActiveDelete] = useState(false); // Estado para mostrar/ocultar la confirmación de borrado
 
@@ -106,36 +106,12 @@ export default function ProjectsAdmin({ projects }) {
             <div id="Projects" className="Projects_Admin">
                 <h2 className="title">Projects</h2>
                 
-                <span className="count">{projects.length}/6</span>
+                <span className="count">{certificates.length}/6</span>
                 
-                <section className="Portafolio">
-                    <div className="galeria-portafolio" id="projects">
-                        {/* Renderiza cada proyecto */}
-                        {projects && projects.map(element => (
-                            <div className="content-portafolio" key={element.id}>
-                                <div className="img" style={{ backgroundImage: `url(${element.image})` }}></div>
-                                <p className="title-portafolios">{element.title}</p>
-                                <div className="content-button-portafolio">
-                                    {/* Botón para activar la confirmación de borrado */}
-                                    <button className="noselect delete" onClick={() => {
-                                        data.id = element.id;
-                                        setActiveDelete(true);
-                                    }}>
-                                        <span className="text">Delete</span>
-                                        <span className="icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                                <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                
 
                 {/* Botón para mostrar el formulario de añadir */}
-                <ButtonAdding array={projects} />
+                <ButtonAdding array={certificates} />
 
                 {/* Renderiza el formulario de añadir si está activo */}
                 {activeForm && <div className="Container_Form_adding">
