@@ -1,17 +1,19 @@
 import React from "react";
 
-export default function Header() {
+export default function Header({name}) {
+    name = name.split(" ");
+
     return(
         <>
             <header id="Header">
                 <div className="presentacion">
                     <h3>Hello, I'm</h3>
-                    <h1><span style={{ fontWeight: '700' }}>Nestor</span> Daniel</h1>
+                    <h1><span style={{ fontWeight: '700' }}>{name[0]}</span> {name[1]}</h1>
                     <p>Web Developer</p>
                     
                     <div className="btn-contacto">
                         <a href="/WebCV/assets/pdf/cv-en.pdf" target="_blank">Download CV</a>
-                        <a href="#Ubicacion-CT">Contact</a>
+                        <a href="#Contact">Contact</a>
                     </div>
                 </div>
             </header>

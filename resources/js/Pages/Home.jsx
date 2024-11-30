@@ -11,18 +11,18 @@ import Certificates from '@/Components/Certificate';
 import Contact from '@/Components/Contact';
 import BackgroundEffect from '@/Components/BackgroundEffect';
 
-export default function Home({ projects, certificates }) {
+export default function Home({ projects, certificates, myPerson }) {
     
     return (
         <>
             <Head title="Home" />
             <Language />
             <Nav/>
-            <Header />
-            <HeroImage />
+            <Header name={myPerson.name}/>
+            <HeroImage avatar={myPerson.avatar}/>
 
-            <About />
-            <Experience />
+            <About myPerson={myPerson}/>
+            <Experience backend={myPerson.backend} frontend={myPerson.frontend}/>
             <Projects projects={projects} />
             <Certificates certificates={certificates} />
             <Contact />

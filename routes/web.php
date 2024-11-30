@@ -5,6 +5,7 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Certificate;
+use App\Models\MyPerson;
 use App\Models\Project;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,10 +14,12 @@ use Inertia\Inertia;
 Route::get('/', function () {
     $projects = Project::all()->toArray();
     $certificates = Certificate::all()->toArray();
-
+    $myPerson = MyPerson::find(1);
+    
     return Inertia::render('Home', [
         'projects' => $projects,
-        'certificates' => $certificates
+        'certificates' => $certificates,
+        "myPerson" => $myPerson
     ]);
 });
 

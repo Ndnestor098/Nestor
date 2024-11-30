@@ -17,7 +17,7 @@ class MyPersonController extends Controller
             'client' => 55, 
             'projects' => 8, 
             'backend' => json_encode(["PHP", "Laravel", "Node", "SQL", "Docker", "GIT"]), 
-            'frontend' => json_encode(["React", "Tailwind", "CSS", "JavaScript", "Docker", "GIT"])
+            'frontend' => json_encode(["React", "Tailwind", "CSS", "JavaScript", 'Node', "Bootstrap"])
         ]);
     }
 }

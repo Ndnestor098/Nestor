@@ -276,13 +276,14 @@ main {
         }
 
         .btn-contacto {
-            button {
+            a {
                 background-color: #29ef8a;
                 color: #000;
                 border: none;
                 padding: 20px;
                 border-radius: 15px;
                 margin-left: 98px;
+                margin-top: 10px;
                 font-size: 17px;
                 font-weight: bold;
             }
