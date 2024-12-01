@@ -91,7 +91,7 @@ export default function CertificatesAdmin({ certificates }) {
                 <span className="count">{certificates.length}/8</span>
                 
                 <section className="certificado" style={{ marginBottom:"50px" }}>
-                    <div className="galeria-certificado" id="certificados" style={{ height:"600px" }}>
+                    <div className="galeria-certificado h-full min-h-600" id="certificados">
                         {
                             certificates && certificates.map(element => (
                                 <div className="content-certificado" key={element.id + element.title}>

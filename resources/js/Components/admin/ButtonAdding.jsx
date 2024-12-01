@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ButtonAdding({ array, max, setActiveForm }) {
+export default function ButtonAdding({ array=[0], max=2, setActiveForm }) {
     return(
         <>
             <div className="Content_Adding">
