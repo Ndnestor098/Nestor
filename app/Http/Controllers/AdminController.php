@@ -15,6 +15,8 @@ class AdminController extends Controller
         $projects = Project::all()->toArray();
         $certificates = Certificate::all()->toArray();
         $myPerson = MyPerson::find(1);
+        $myPerson->backend = json_decode($myPerson->backend, true);
+        $myPerson->frontend = json_decode($myPerson->frontend, true);
 
         return Inertia::render('Admin', [
             "projects" => $projects,
