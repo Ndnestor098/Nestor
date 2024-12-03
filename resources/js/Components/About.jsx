@@ -1,6 +1,12 @@
 import React from "react"
 
 export default function About({myPerson}) {
+    const today = new Date();
+    const data = new Date(myPerson.experience);
+
+    const date = today.getFullYear() - data.getFullYear()
+
+    console.log(date)
     return(
         <div id="About">
             <h2 id="sbm">About Me</h2>
@@ -12,7 +18,7 @@ export default function About({myPerson}) {
                     <div className="experiencias-clientes">
                         <div className="years">
                             <p className="title-experiencias-clientes">Experience</p>
-                            <p>+{myPerson.experience} years</p>
+                            <p>+{date} years</p>
                         </div>
                         <div className="clientes">
                             <p className="title-experiencias-clientes">Clients</p>

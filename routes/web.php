@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\MyPersonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Certificate;
@@ -32,5 +33,8 @@ Route::delete('/project/{id}', [ProjectController::class, "delete"])->name("proj
 Route::post('/certificate', [CertificateController::class, "create"])->name("certificate.create");
 
 Route::delete('/certificate/{id}', [CertificateController::class, "delete"])->name("certificate.delete");
+
+Route::post('/my', [MyPersonController::class, "update"])->name("my.update");
+
 
 require __DIR__.'/auth.php';

@@ -4,20 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\MyPerson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MyPersonController extends Controller
 {
-    public function index() {
-        MyPerson::create([
-            'name' => "Nestor Daniel",
-            'image' => "http://192.168.1.117:8000/storage/public/images/io.webp",
-            'avatar' =>"http://192.168.1.117:8000/storage/public/images/gato.webp", 
-            'description' => "I define myself as a passionate web and desktop application developer, specialized in technologies such as Laravel, JavaScript, CSS, SQL, React, Tailwind, Python, and PHP, with strong expertise in Eloquent ORM. My focus goes beyond mere aesthetics; I am dedicated to creating distinctive digital experiences by blending creativity with responsibility. My goal is to find the perfect balance between functionality and innovation in each project. I am enthusiastic about challenges, always open to learning and constantly growing. Additionally, I speak Spanish fluently, Italian at a B1 level, and English at a basic level.", 
-            'experience' => 5, 
-            'client' => 55, 
-            'projects' => 8, 
-            'backend' => json_encode(["PHP", "Laravel", "Node", "SQL", "Docker", "GIT"]), 
-            'frontend' => json_encode(["React", "Tailwind", "CSS", "JavaScript", 'Node', "Bootstrap"])
+    public function update(Request $request) {
+        $request->validate([
+            'name' => "string",
+            'experience' => "date",
+            'client' => "numeric",
+            'projects' => "numeric",
+            'description' => "string",
+            'image' => 'nullable|image|mimes:png,jpeg,jpg',
+            'avatar' => 'nullable|image|mimes:png,jpeg,jpg',
         ]);
+
+        $my = MyPerson::findOrFail(1);
+
+        $urlImage = $my->image;
+        $urlAvatar = $my->avatar;
+
+        if($request->hasFile("image")){
+            $filePathImage = $request->file('file')->store('images');
+            $urlImage = Storage::url($filePathImage);
+        }
+
+        if($request->hasFile("avatar")){
+            $filePathAvatar = $request->file('file')->store('images');
+            $urlAvatar = Storage::url($filePathAvatar);
+        }
+
+        $my->update([
+            'name' => $request->input("name", $my->name),
+            'experience' => $request->input("experience", $my->experience),
+            'client' => $request->input("client", $my->client),
+            'projects' => $request->input("projects", $my->projects),
+            'description' => $request->input("description", $my->description),
+            'image' => $urlImage,
+            'avatar' => $urlAvatar,
+        ]);
+
+        return redirect()->back()->with('success', 'Project added successfully!');
     }
 }
