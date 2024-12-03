@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Experience(params) {
+export default function Experience({ backend, frontend }) {
     return(
         <div id="Experience">
             <h2>Experiences</h2>
@@ -9,26 +9,17 @@ export default function Experience(params) {
                     <div className="cuadrado-experiencias">
                         <p className="title-cuadrado-experiencias">Front-End Developer</p>
                         <div className="ordenar-experiencia">
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> <span>React</span></p>
-                                <p>Starting</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> <span>CSS</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> <span>JavaScript</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> <span>Web Design</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> <span>Tailwind</span></p>
-                                <p>Intermediate</p>
-                            </div>
+                            {
+                                backend && Object.entries(backend).map((array)=>(
+                                    <div key={array[0]}>
+                                        <p className="title-lenguaje">
+                                            <img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> 
+                                            <span>{array[0]}</span>
+                                        </p>
+                                        <p>{array[1]}</p>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -36,30 +27,17 @@ export default function Experience(params) {
                     <div className="cuadrado-experiencias">
                         <p  className="title-cuadrado-experiencias">Back-End Developer</p>
                         <div className="ordenar-experiencia">
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15" title="Check Confirm" alt="Nestor - icon-check"></img> <span>Python</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15 "title="Check Confirm" alt="Nestor - icon-check"></img> <span>SQL</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15" title="Check Confirm" alt="Nestor - icon-check"></img> <span>Eloquent</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15" title="Check Confirm" alt="Nestor - icon-check"></img> <span>GIT</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15" title="Check Confirm" alt="Nestor - icon-check"></img> <span>PHP</span></p>
-                                <p>Intermediate</p>
-                            </div>
-                            <div>
-                                <p className="title-lenguaje"><img src="/images/svg/check.svg" width="15" height="15" title="Check Confirm" alt="Nestor - icon-check"></img> <span>Laravel</span></p>
-                                <p>Intermediate</p>
-                            </div>
+                            {
+                                frontend && Object.entries(frontend).map((array)=>(
+                                    <div key={array[0]}>
+                                        <p className="title-lenguaje">
+                                            <img src="/images/svg/check.svg" width="15" height="15"title="Check Confirm" alt="Nestor - icon-check"></img> 
+                                            <span>{array[0]}</span>
+                                        </p>
+                                        <p>{array[1]}</p>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>

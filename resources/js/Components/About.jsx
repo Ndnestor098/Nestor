@@ -6,7 +6,6 @@ export default function About({myPerson}) {
 
     const date = today.getFullYear() - data.getFullYear()
 
-    console.log(date)
     return(
         <div id="About">
             <h2 id="sbm">About Me</h2>
@@ -26,7 +25,7 @@ export default function About({myPerson}) {
                         </div>
                         <div className="proyectos">
                             <p className="title-experiencias-clientes">Projects</p>
-                            <p>+{myPerson.project} projects</p>
+                            <p>+{myPerson.projects} projects</p>
                         </div>
                     </div>
                     <div className="area-texto">

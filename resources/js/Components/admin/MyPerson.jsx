@@ -2,6 +2,32 @@ import React from "react";
 import ButtonAdding from "./ButtonAdding";
 import { useForm } from "@inertiajs/react";
 
+const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+
+    const updatedData = {
+        ...data,
+        [name]: type === "file" ? files[0] : value, // Manejo de archivos
+    };
+
+    setData(updatedData);
+};
+
+const handleSubmit = async () => {
+    const payload = { ...data };
+
+    console.log("Enviando datos:", payload);  // Esto se imprimirá si la función se llama
+
+    try {
+        await post('/my', {
+            data: payload,
+            onSuccess: () => { console.log("Datos enviados con éxito:", payload); },
+            onError : (e) => { console.log(e); }
+        });
+    } catch (error) {
+        console.error("Error al enviar datos:", error);
+    }
+};
 
 export default function MyPerson({ myPerson }) {
     const { data, setData, post } = useForm({
@@ -13,33 +39,6 @@ export default function MyPerson({ myPerson }) {
         image: null,  
         avatar: null, 
     });
-
-    const handleChange = (e) => {
-        const { name, value, type, files } = e.target;
-    
-        const updatedData = {
-            ...data,
-            [name]: type === "file" ? files[0] : value, // Manejo de archivos
-        };
-    
-        setData(updatedData);
-    };
-
-    const handleSubmit = async () => {
-        const payload = { ...data };
-    
-        console.log("Enviando datos:", payload);  // Esto se imprimirá si la función se llama
-    
-        try {
-            await post('/my', {
-                data: payload,
-                onSuccess: () => { console.log("Datos enviados con éxito:", payload); },
-                onError : (e) => { console.log(e); }
-            });
-        } catch (error) {
-            console.error("Error al enviar datos:", error);
-        }
-    };
 
     return(
         <div className="flex flex-col h-full w-full gap-6">
@@ -104,7 +103,7 @@ export default function MyPerson({ myPerson }) {
             </div>
             
             <div className="w-full h-full">
-                <ButtonAdding setActiveForm={handleSubmit}/>
+                <ButtonAdding title="Update" setActiveForm={handleSubmit}/>
             </div>
         </div>
     )

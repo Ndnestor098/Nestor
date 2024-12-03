@@ -16,6 +16,8 @@ Route::get('/', function () {
     $projects = Project::all()->toArray();
     $certificates = Certificate::all()->toArray();
     $myPerson = MyPerson::find(1);
+    $myPerson->backend = json_decode($myPerson->backend);
+    $myPerson->frontend = json_decode($myPerson->frontend);
     
     return Inertia::render('Home', [
         'projects' => $projects,
