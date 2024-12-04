@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonAdding from "./ButtonAdding";
 import { useForm } from "@inertiajs/react";
+import DeleteButton from "./DeleteButton";
 
-
+const updateError = (method, message) => {
+    setErrorLanguage(prevState => ({
+        ...prevState,
+        [method]: {
+            ...prevState[method],
+            error: message,
+        },
+    }));
+};
 
 export default function MyPerson({ myPerson }) {
     const { data, setData, post } = useForm({
@@ -18,18 +27,55 @@ export default function MyPerson({ myPerson }) {
     });
 
     const [ backendText, setBackendText ] = useState();
+    const [ frontendText, setFrontendText ] = useState();
     const [ level, setLevel ] = useState();
-    const [ error, setError ] = useState([]);
+    const [ errorLanguage, setErrorLanguage ] = useState({
+        backend : {
+            error : null
+        },
+        frontend : {
+            error : null
+        },
+    });
 
     const handleChangeLanguage = (method, add, level) => {
-        const array = {...data.backend, [add] : level}
-        console.log(array)
-        return;
-        if(method == "backend"){
-            setData({...data, backend : array});
-        } else {
-            setData({...data, frontend : data.frontend.push(add)});
+        if(!add){
+            updateError(method, `Write a ${method} language please`);
+            return ;
         }
+
+        if(!level){
+            updateError(method, "Select a level please");
+            return ;
+        } 
+
+        if (!["Beginner", "Intermediate", "Advanced"].includes(level)) {
+            updateError(method, "Invalid level selected");
+            return;
+        }
+        
+        const object = {...data[method], [add] : level}
+
+        if(Object.keys(object).length > 6){
+            updateError(method, `Maximum number of ${method} languages is 6`);
+            return ;
+        }
+
+        setErrorLanguage(prevState => ({
+            ...prevState, 
+            [method]: {
+                ...prevState[method], 
+                error: null,
+            },
+        }));
+        
+        setData({...data, [method] : object});
+    }
+
+    const handleDeleteLanguage = (method, select) =>{
+        const newObject = { ...data[method] };
+        delete newObject[select]; 
+        setData({ ...data, [method]: newObject });
     }
 
     const handleChange = (e) => {
@@ -45,9 +91,7 @@ export default function MyPerson({ myPerson }) {
     
     const handleSubmit = async () => {
         const payload = { ...data };
-    
-        console.log("Enviando datos:", payload);  // Esto se imprimirá si la función se llama
-    
+
         try {
             await post('/my', {
                 data: payload,
@@ -115,7 +159,7 @@ export default function MyPerson({ myPerson }) {
                         name="description" 
                         id="description" 
                         onChange={(e)=>{handleChange(e)}}
-                        defaultValue={data.description}
+                        value={data.description || ""}
                     >
                     </textarea>
                 </form>
@@ -124,21 +168,21 @@ export default function MyPerson({ myPerson }) {
             <div className="w-full h-full p-5 ml-4 flex text-white">
                 <div className="w-full h-full flex flex-col gap-8 item-center">
                     <div className="w-full h-full flex flex-col gap-3 items-center">
-                        <label htmlFor="" className="font-semibold">Write the backend language to add</label>
+                        <label htmlFor="" className="font-semibold">Write the backend language to add or update</label>
                         <input type="text" name="backend" onChange={(e)=>{setBackendText(e.target.value)}} id="backend_text" className="w-full max-w-72 text-black"/>
                         
                         <label htmlFor="level">Select a level</label>
                         <select name="level" id="level" defaultValue="" onChange={e=>{setLevel(e.target.value)}} className="w-full max-w-72 text-black ">
                             <option value="" disabled>Select a Level</option>
-                            <option value="basic">Basic</option>
+                            <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
                             <option value="advanced">Advanced</option>
                         </select>
                         {
-                            error["level"] && <span className="text-red-600 font-semibold">{error["level"]}</span>
+                            errorLanguage.backend.error && <span className="text-red-600 font-semibold">{errorLanguage.backend.error}</span>
                         }
 
-                        <button className="backend" onClick={()=>{handleChangeLanguage("backend", backendText, level)}}>Add</button>
+                        <button type="button" className="backend" onClick={()=>{handleChangeLanguage("backend", backendText, level)}}>Add</button>
                     </div>
 
                     <div className="w-full h-full flex gap-5 justify-center">
@@ -146,26 +190,46 @@ export default function MyPerson({ myPerson }) {
                             data.backend && Object.entries(data.backend).map((array)=>(
                                 <div key={array[0]} className="flex ">
                                     <div className="flex gap-2 items-center">
+                                        <DeleteButton onClick={()=>{ handleDeleteLanguage("backend", array[0]) }}/>
                                         <label htmlFor={ array[0] }> { array[0] } </label>
                                     </div>
                                 </div>
                             ))
                         }
                     </div>
-                    
                 </div>
 
-                <div className="w-full h-full flex gap-5 justify-center">
-                    {
-                        data.frontend && Object.entries(data.frontend).map((array)=>(
-                            <div key={array[0]} className="flex">
-                                <div className="flex gap-2 items-center">
-                                    <input type="checkbox" name="frontend[]" id={ array[0] } />
-                                    <label htmlFor={ array[0] }> { array[0] } </label>
+                <div className="w-full h-full flex flex-col gap-8 item-center">
+                    <div className="w-full h-full flex flex-col gap-3 items-center">
+                        <label htmlFor="frontend_text" className="font-semibold">Write the frontend language to add or update</label>
+                        <input type="text" name="frontend" onChange={(e)=>{setFrontendText(e.target.value)}} id="frontend_text" className="w-full max-w-72 text-black"/>
+                        
+                        <label htmlFor="level">Select a level</label>
+                        <select name="level" id="level" defaultValue="" onChange={e=>{setLevel(e.target.value)}} className="w-full max-w-72 text-black ">
+                            <option value="" disabled>Select a Level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                        {
+                            errorLanguage.frontend.error && <span className="text-red-600 font-semibold">{errorLanguage.frontend.error}</span>
+                        }
+
+                        <button type="button" className="frontend" onClick={()=>{handleChangeLanguage("frontend", frontendText, level)}}>Add</button>
+                    </div>
+
+                    <div className="w-full h-full flex gap-5 justify-center">
+                        {
+                            data.frontend && Object.entries(data.frontend).map((array)=>(
+                                <div key={array[0]} className="flex ">
+                                    <div className="flex gap-2 items-center">
+                                        <DeleteButton onClick={()=>{ handleDeleteLanguage("frontend", array[0]) }}/>
+                                        <label htmlFor={ array[0] }> { array[0] } </label>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    }
+                            ))
+                        }
+                    </div>
                 </div>
             </div>  
             

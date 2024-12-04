@@ -15,6 +15,10 @@ class MyPersonController extends Controller
             'client' => "numeric",
             'projects' => "numeric",
             'description' => "string",
+            'backend' => "array",
+            'backend.*' => "string|in:Beginner,Intermediate,Advanced",
+            'frontend' => "array",
+            'frontend.*' => "string|in:Beginner,Intermediate,Advanced",
             'image' => 'nullable|image|mimes:png,jpeg,jpg',
             'avatar' => 'nullable|image|mimes:png,jpeg,jpg',
         ]);
@@ -42,6 +46,8 @@ class MyPersonController extends Controller
             'description' => $request->input("description", $my->description),
             'image' => $urlImage,
             'avatar' => $urlAvatar,
+            'frontend' => $request->input("frontend", $my->frontend),
+            'backend' => $request->input("backend", $my->backend),
         ]);
 
         return redirect()->back()->with('success', 'Project added successfully!');
