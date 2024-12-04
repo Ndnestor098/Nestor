@@ -26,7 +26,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/admin', [AdminController::class, "index"])->name("admin");
+Route::get('/admin', [AdminController::class, "index"])->middleware("auth")->name("admin");
 
 Route::post('/project', [ProjectController::class, "create"])->name("project.create");
 
